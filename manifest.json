@@ -1,0 +1,8 @@
+{
+    "name": "Офлайн-Заметки",
+    "short_name": "Заметки",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4CAF50"
+}
