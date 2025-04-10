@@ -5,7 +5,6 @@ const ASSETS = [
     '/styles.css',
     '/app.js',
     '/manifest.json',
-    // Добавьте пути к вашим иконкам
 ];
 
 self.addEventListener('install', (event) => {
