@@ -1,6 +1,6 @@
 {
     "name": "Офлайн-камушки",
-    "short_name": "Камушек",
+    "short_name": "Камушки",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",

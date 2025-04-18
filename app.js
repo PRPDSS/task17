@@ -12,9 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let notificationPermission = Notification.permission;
     let notificationInterval;
 
+    // Загрузка заметок
     let notes = JSON.parse(localStorage.getItem('notes') || '[]');
     renderNotes();
 
+    // Обработчики событий
     addBtn.addEventListener('click', addNote);
     noteInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -27,11 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
     filterButtons.forEach(btn => {
         btn.addEventListener('click', () => setFilter(btn.dataset.filter));
     });
-    
+
+    // Проверка соединения
     updateOnlineStatus();
     window.addEventListener('online', updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);
 
+    // Функции
     function addNote() {
         const text = noteInput.value.trim();
         if (text) {
@@ -49,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Показ уведомления
             if (notificationPermission === 'granted') {
-                showNotification('Новый камушек', `Добавлено: ${text}`);
+                showNotification('Новый камушек', `Добавлен: ${text}`);
             }
         }
     }
@@ -67,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="note-date">${note.date}</div>
                 <div class="note-actions">
                     <button class="complete-btn" data-id="${note.id}">
-                        ${note.completed ? 'Активен' : 'Выполнен'}
+                        ${note.completed ? 'В процессе' : 'Выполнен'}
                     </button>
                     <button class="delete-btn" data-id="${note.id}">Удалить</button>
                 </div>
@@ -77,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveNotes() {
         localStorage.setItem('notes', JSON.stringify(notes));
+        // Запуск напоминаний, если есть активные задачи
         scheduleReminders();
     }
 
@@ -128,8 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const activeNotes = notes.filter(note => !note.completed);
                 if (activeNotes.length > 0) {
                     showNotification(
-                        'Напоминание о камушках',
-                        `У вас ${activeNotes.length} невыполненных камушков`
+                        'Напоминание о задачах',
+                        `У вас ${activeNotes.length} невыполненных задач`
                     );
                 }
             }, 2 * 60 * 60 * 1000); // 2 часа
@@ -138,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showNotification(title, body) {
         if (notificationPermission === 'granted') {
-            new Notification(title, { body, icon: '/icon-192.png' });
+            new Notification(title, { body });
         }
     }
 
@@ -146,6 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         offlineStatus.classList.toggle('active', !navigator.onLine);
     }
 
+    // Обработка действий с заметками
     notesList.addEventListener('click', (e) => {
         if (e.target.classList.contains('delete-btn')) {
             const id = parseInt(e.target.dataset.id);
@@ -164,21 +170,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Инициализация
     updateNotificationButton();
     scheduleReminders();
 });
 
+// Регистрация Service Worker
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
             .then(registration => {
                 console.log('SW registered');
+                // Подписка на push-уведомления
                 return registration.pushManager.getSubscription()
                     .then(subscription => {
                         if (!subscription) {
                             return registration.pushManager.subscribe({
                                 userVisibleOnly: true,
-                                applicationServerKey: urlBase64ToUint8Array(process.env.PUBLIC_KEY)
+                                applicationServerKey: urlBase64ToUint8Array('ВАШ_PUBLIC_VAPID_KEY')
                             });
                         }
                         return subscription;
@@ -188,6 +197,7 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+// Вспомогательная функция для VAPID ключа
 function urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
