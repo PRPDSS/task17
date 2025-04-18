@@ -1,6 +1,6 @@
 {
-    "name": "Офлайн-Заметки",
-    "short_name": "Заметки",
+    "name": "Офлайн-камушки",
+    "short_name": "Камушки",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",

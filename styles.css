@@ -107,3 +107,57 @@ h1 {
         height: 80px;
     }
 }
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background: #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-btn.active {
+    background: #4CAF50;
+    color: white;
+}
+
+#notifications-btn {
+    padding: 8px 16px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.note-card.completed {
+    opacity: 0.7;
+    border-left: 4px solid #4CAF50;
+}
+
+.note-card.completed .note-text {
+    text-decoration: line-through;
+}
+
+.complete-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
