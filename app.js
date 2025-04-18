@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     filterButtons.forEach(btn => {
         btn.addEventListener('click', () => setFilter(btn.dataset.filter));
     });
-    я
+    
     updateOnlineStatus();
     window.addEventListener('online', updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);

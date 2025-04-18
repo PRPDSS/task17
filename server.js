@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -10,38 +12,28 @@ const mimeTypes = {
   '.js': 'text/javascript',
   '.css': 'text/css',
   '.json': 'application/json',
-  '.png': 'image/png',
-  '.jpg': 'image/jpg',
-  '.ico': 'image/x-icon',
-  '.svg': 'image/svg+xml'
 };
 
-// Создаем HTTP сервер
 const server = http.createServer((req, res) => {
   const parsedUrl = url.parse(req.url);
   let pathname = path.join(__dirname, parsedUrl.pathname);
   
-  // Проверяем существование файла
   fs.stat(pathname, (err, stats) => {
     if (err) {
-      // Если файл не найден, возвращаем index.html (для SPA)
       serveFile(path.join(__dirname, '/index.html'), res);
       return;
     }
 
     if (stats.isDirectory()) {
-      // Если это директория, ищем index.html внутри
       pathname = path.join(pathname, '/index.html');
       fs.stat(pathname, (err, stats) => {
         if (!err && stats.isFile()) {
           serveFile(pathname, res);
         } else {
-          // Если index.html не найден, возвращаем основной index.html
           serveFile(path.join(__dirname, '/index.html'), res);
         }
       });
     } else if (stats.isFile()) {
-      // Если это файл, отдаем его
       serveFile(pathname, res);
     }
   });
